@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>trabajopractico.json</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  </head>
+  <body>
+      <div id="map" style="height: 500px; width: 500px;"></div>
+      <select id="lista">
+        <option value="">Selecciona un lugar...</option>
+      </select>
+      <p id="descripcion">Selecciona un lugar para ver su descripción.</p>
+  </body>
+  
+  <script>
+    const iconoPersonalizado = L.icon({
+      iconUrl: 'hospital.png', // ruta o URL de tu imagen
+      iconSize: [40, 40],      // tamaño del ícono
+      iconAnchor: [20, 40],    // punto del ícono que se alinea a la coordenada
+      popupAnchor: [0, -40],   // posición del popup relativo al ícono
+    });
+
+    // Crear el mapa centrado en una ubicación (por ejemplo Buenos Aires)
+    const map = L.map('map').setView([-34.5230973, -58.7053485], 13);
+
+    // Agregar capa de OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Agregar marcador
+    //  L.marker([-34.5230973, -58.7053485]).addTo(map)
+    //  .bindPopup('Universidad Nacional De General Sarmiento')
+    //  .openPopup();
+    //  L.marker([-34.530499, -58.7055509]).addTo(map)
+    //  .bindPopup('Terrazas de Mayo')
+    //  .openPopup();
+    //  L.marker([-34.5429576, -58.716732]).addTo(map)
+    //  .bindPopup('Plaza Sarmiento')
+    //  .openPopup();
+    //  L.marker([-34.5422524, -58.7126277]).addTo(map)
+    //  .bindPopup('Bingo San Miguel')
+    //  .openPopup();
+
+      const puntos = [
+      { 
+        coords: [-34.5230973, -58.7053485], 
+        nombre: 'Universidad Nacional De General Sarmiento',
+        descripcion: 'Universidad Nacional De General Sarmiento: Centro académico público con amplias áreas verdes y facultades modernas.'
+      },
+      { 
+        coords: [-34.530499, -58.7055509], 
+        nombre: 'Terrazas de Mayo',
+        descripcion: 'Terrazas de Mayo: Centro comercial con tiendas, restaurantes y un cine muy concurrido.'
+      },
+      { 
+        coords: [-34.5429576, -58.716732], 
+        nombre: 'Plaza Sarmiento',
+        descripcion: 'Plaza Sarmiento: Espacio verde ideal para caminar, hacer picnic o disfrutar eventos locales.'
+      },
+      { 
+        coords: [-34.5422524, -58.7126277], 
+        nombre: 'Bingo San Miguel',
+        descripcion: 'Bingo San Miguel: Entretenimiento nocturno con bingo, bar y espectáculos en vivo.'
+      },
+    ];
+      const lista = document.getElementById('lista');
+      const descripcion = document.getElementById('descripcion');
+      const info = document.getElementById('info');
+
+      const marcadores = [];
+
+
+
+      puntos.forEach((p, i) => {
+        const marker = L.marker(p.coords).addTo(map).bindPopup(p.nombre);
+        marcadores.push(marker);
+
+        const option = document.createElement("option");
+        option.value = i;
+        option.textContent = p.nombre;
+        lista.appendChild(option);
+
+        // Evento click en el marcador → sincroniza el select y la descripción
+        marker.on("click", () => {
+          map.setView(p.coords, 16, { animate: true });
+          lista.value = i;
+          descripcion.textContent = p.descripcion;
+        });
+      });
+      
+      lista.addEventListener('change', (e) => {
+      const i = e.target.value;
+      if (i !== '') {
+        const punto = puntos[i];
+        map.setView(punto.coords, 16, { animate: true });
+        marcadores[i].openPopup();
+        descripcion.textContent = punto.descripcion;
+      } else {
+        descripcion.textContent = 'Selecciona un lugar para ver su ubicación.';
+      }
+    });
+
+
+  </script>
+</html>
