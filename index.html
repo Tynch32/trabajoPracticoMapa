@@ -14,6 +14,10 @@
         <option value="">Selecciona un lugar...</option>
       </select>
       <p id="descripcion">Selecciona un lugar para ver su descripción.</p>
+      <div id="Imagen">
+        <img src="https://via.placeholder.com/600x400?text=Selecciona+un+lugar" style="width:400px; background-size:cover; background-position:center;" alt="Imagen del lugar">
+      </div>
+      
   </body>
   
   <script>
@@ -23,58 +27,54 @@
       iconAnchor: [20, 40],    // punto del ícono que se alinea a la coordenada
       popupAnchor: [0, -40],   // posición del popup relativo al ícono
     });
+    const lista = document.getElementById('lista');
+    const descripcion = document.getElementById('descripcion');
+    const info = document.getElementById('info');
+    const imagenDiv = document.getElementById("Imagen");
+    const imagenTag = imagenDiv.querySelector("img");
+    const marcadores = [];
 
     // Crear el mapa centrado en una ubicación (por ejemplo Buenos Aires)
     const map = L.map('map').setView([-34.5230973, -58.7053485], 13);
 
     // Agregar capa de OpenStreetMap
+
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // Agregar marcador
-    //  L.marker([-34.5230973, -58.7053485]).addTo(map)
-    //  .bindPopup('Universidad Nacional De General Sarmiento')
-    //  .openPopup();
-    //  L.marker([-34.530499, -58.7055509]).addTo(map)
-    //  .bindPopup('Terrazas de Mayo')
-    //  .openPopup();
-    //  L.marker([-34.5429576, -58.716732]).addTo(map)
-    //  .bindPopup('Plaza Sarmiento')
-    //  .openPopup();
-    //  L.marker([-34.5422524, -58.7126277]).addTo(map)
-    //  .bindPopup('Bingo San Miguel')
-    //  .openPopup();
-
       const puntos = [
-      { 
-        coords: [-34.5230973, -58.7053485], 
-        nombre: 'Universidad Nacional De General Sarmiento',
-        descripcion: 'Universidad Nacional De General Sarmiento: Centro académico público con amplias áreas verdes y facultades modernas.'
+      {
+        coords: [-34.5230973, -58.7053485],
+        nombre: "Universidad Nacional De General Sarmiento",
+        descripcion:
+          "La UNGS es una universidad pública destacada por su compromiso social y su entorno natural amplio, ideal para el estudio y la investigación.",
+        imagen: "https://noticiasungs.ungs.edu.ar/wp-content/uploads/2020/03/Bienestar-D%C3%ADa-del-Estu_opt.jpeg"
       },
-      { 
-        coords: [-34.530499, -58.7055509], 
-        nombre: 'Terrazas de Mayo',
-        descripcion: 'Terrazas de Mayo: Centro comercial con tiendas, restaurantes y un cine muy concurrido.'
+      {
+        coords: [-34.530499, -58.7055509],
+        nombre: "Terrazas de Mayo",
+        descripcion:
+          "Centro comercial moderno con tiendas, restaurantes, cine y espacios al aire libre, muy visitado los fines de semana.",
+        imagen: "https://www.irsa.com.ar/wp-content/uploads/2024/12/Terrazas-de-mayo-5.jpeg"
       },
-      { 
-        coords: [-34.5429576, -58.716732], 
-        nombre: 'Plaza Sarmiento',
-        descripcion: 'Plaza Sarmiento: Espacio verde ideal para caminar, hacer picnic o disfrutar eventos locales.'
+      {
+        coords: [-34.5429576, -58.716732],
+        nombre: "Plaza Sarmiento",
+        descripcion:
+          "Una de las plazas más conocidas de San Miguel, con áreas verdes, juegos para niños y eventos comunitarios frecuentes.",
+        imagen: "https://www.smnoticias.com/wp-content/uploads/2023/02/Catedral-de-San-Miguel-desde-la-plaza-principal.jpeg"
       },
-      { 
-        coords: [-34.5422524, -58.7126277], 
-        nombre: 'Bingo San Miguel',
-        descripcion: 'Bingo San Miguel: Entretenimiento nocturno con bingo, bar y espectáculos en vivo.'
+      {
+        coords: [-34.5422524, -58.7126277],
+        nombre: "Bingo San Miguel",
+        descripcion:
+          "Centro de entretenimiento con bingo, música en vivo y opciones gastronómicas, muy concurrido por locales y turistas.",
+        imagen: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0f/da/ae/ef/bingo-san-miguel.jpg?w=900&h=500&s=1"
       },
     ];
-      const lista = document.getElementById('lista');
-      const descripcion = document.getElementById('descripcion');
-      const info = document.getElementById('info');
 
-      const marcadores = [];
-
-
+      
 
       puntos.forEach((p, i) => {
         const marker = L.marker(p.coords).addTo(map).bindPopup(p.nombre);
@@ -90,6 +90,8 @@
           map.setView(p.coords, 16, { animate: true });
           lista.value = i;
           descripcion.textContent = p.descripcion;
+          imagenTag.src = p.imagen;
+          imagenTag.alt = p.nombre;
         });
       });
       
@@ -100,8 +102,12 @@
         map.setView(punto.coords, 16, { animate: true });
         marcadores[i].openPopup();
         descripcion.textContent = punto.descripcion;
+        imagenTag.src = punto.imagen;
+        imagenTag.alt = punto.nombre;
       } else {
         descripcion.textContent = 'Selecciona un lugar para ver su ubicación.';
+        imagenTag.src = "https://via.placeholder.com/600x400?text=Selecciona+un+lugar";
+        imagenTag.alt = "Imagen del lugar";
       }
     });
 
